@@ -21,5 +21,15 @@ export const ProductService = {
       console.error('Error fetching product:', error);
       throw error;
     }
+  },
+
+  async getByCategory(category: string): Promise<IProduct[]> {
+    try {
+      const { data } = await axios.get<IProduct[]>(`${API_URL}/products/category/${category}`);
+      return data;
+    } catch (error) {
+      console.error('Error fetching products by category:', error);
+      return [];
+    }
   }
 }; 

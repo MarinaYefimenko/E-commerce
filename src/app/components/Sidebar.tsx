@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useProducts } from '../context/ProductContext';
 import { useSearch } from '../context/SearchContext';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { Suspense } from 'react';
 
 interface SidebarProps {
   onCategoryChange: (category: string) => void;
@@ -76,45 +77,45 @@ const Sidebar: React.FC<SidebarProps> = ({ onCategoryChange, activeCategory }) =
             sizes="(max-width: 768px) 100vw, 192px"
           />
         </div>
-        {isLoading ? (
-          <div className="space-y-2">
-            {[...Array(5)].map((_, index) => (
-              <div key={index} className="h-10 bg-gray-200 rounded animate-pulse" />
+        <div className={`${isLoading ? 'hidden' : 'block'}`}>
+          <Suspense fallback={<div className="space-y-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-10 bg-gray-200 rounded-lg animate-pulse" />
             ))}
-          </div>
-        ) : (
-          <ul className="space-y-1">
-            <li 
-              onClick={() => {
-                onCategoryChange('all');
-                setIsMobileMenuOpen(false);
-              }}
-              className={`px-4 py-2 rounded cursor-pointer transition-colors capitalize ${
-                activeCategory === 'all' 
-                  ? 'bg-black text-white' 
-                  : 'hover:bg-gray-200'
-              }`}
-            >
-              All products
-            </li>
-            {categories.map((category) => (
+          </div>}>
+            <ul className="space-y-1">
               <li 
-                key={category} 
                 onClick={() => {
-                  onCategoryChange(category);
+                  onCategoryChange('all');
                   setIsMobileMenuOpen(false);
                 }}
                 className={`px-4 py-2 rounded cursor-pointer transition-colors capitalize ${
-                  activeCategory === category 
+                  activeCategory === 'all' 
                     ? 'bg-black text-white' 
                     : 'hover:bg-gray-200'
                 }`}
               >
-                {category}
+                All products
               </li>
-            ))}
-          </ul>
-        )}
+              {categories.map((category) => (
+                <li 
+                  key={category} 
+                  onClick={() => {
+                    onCategoryChange(category);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`px-4 py-2 rounded cursor-pointer transition-colors capitalize ${
+                    activeCategory === category 
+                      ? 'bg-black text-white' 
+                      : 'hover:bg-gray-200'
+                  }`}
+                >
+                  {category}
+                </li>
+              ))}
+            </ul>
+          </Suspense>
+        </div>
       </aside>
     </>
   );

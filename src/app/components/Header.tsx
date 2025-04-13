@@ -9,6 +9,7 @@ import { useSearch } from '../context/SearchContext';
 import { useCart } from '../context/CartContext';
 import FavoritesModal from './FavoritesModal';
 import CartDrawer from './CartDrawer';
+import { Suspense } from 'react';
 
 const Header: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,33 +72,37 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="flex justify-between items-center px-4 md:px-8 py-4 bg-white shadow-sm fixed top-0 right-0 left-0 md:left-[25%] z-40">
-        <form 
-          onSubmit={handleSearchSubmit}
-          className="relative flex-1 max-w-md mr-4 ml-16 md:ml-0"
-        >
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="w-full pl-4 pr-10 py-2 rounded-lg border border-gray-200 focus:border-gray-300 focus:ring-0 text-sm"
-          />
-          {showClearButton ? (
-            <button 
-              type="button"
-              onClick={handleClearSearch}
-              className="absolute right-10 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1"
+        <div className="flex items-center space-x-8">
+          <Suspense fallback={<div className="flex-1 max-w-2xl h-10 bg-gray-200 rounded-lg animate-pulse" />}>
+            <form 
+              onSubmit={handleSearchSubmit}
+              className="relative flex-1 max-w-md mr-4 ml-16 md:ml-0"
             >
-              <FaTimes size={12} />
-            </button>
-          ) : null}
-          <button 
-            type="submit"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            <FaSearch />
-          </button>
-        </form>
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="w-full pl-4 pr-10 py-2 rounded-lg border border-gray-200 focus:border-gray-300 focus:ring-0 text-sm"
+              />
+              {showClearButton ? (
+                <button 
+                  type="button"
+                  onClick={handleClearSearch}
+                  className="absolute right-10 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                >
+                  <FaTimes size={12} />
+                </button>
+              ) : null}
+              <button 
+                type="submit"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <FaSearch />
+              </button>
+            </form>
+          </Suspense>
+        </div>
         <div className="flex items-center gap-4 ml-4">
           <button 
             onClick={() => setIsModalOpen(true)}

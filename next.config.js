@@ -1,11 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  env: {
-    SERVER_URL: process.env.SERVER_URL,
-  },
+  output: 'export',
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -13,9 +10,7 @@ const nextConfig = {
         pathname: '/img/**',
       },
     ],
-    unoptimized: true,
   },
-  output: 'export',
   basePath: '/e-commerce',
 }
 
