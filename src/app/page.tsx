@@ -31,14 +31,14 @@ export default function Home() {
     : filteredProducts.filter(product => product.category === activeCategory);
 
   return (
-    <main className="flex min-h-screen">
+    <div className="flex min-h-screen">
       <Sidebar 
         activeCategory={activeCategory}
         onCategoryChange={handleCategoryChange}
       />
-      <div className="flex-1 ml-[25%]">
+      <main className="flex-1">
         <Header />
-        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 p-5 mt-16">
           {isLoading ? (
             [...Array(8)].map((_, index) => (
               <div key={index} className="bg-gray-100 rounded-lg aspect-[3/4] animate-pulse" />
@@ -56,7 +56,7 @@ export default function Home() {
             </div>
           )}
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

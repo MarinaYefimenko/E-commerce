@@ -11,6 +11,7 @@ A modern e-commerce application built with Next.js, TypeScript, and Tailwind CSS
 - ⚡ Fast performance with Next.js
 - 🔒 Type-safe development with TypeScript
 - 🎯 SEO-friendly architecture
+- 🖼️ Custom favicon and logo
 
 ## Tech Stack
 
@@ -20,6 +21,7 @@ A modern e-commerce application built with Next.js, TypeScript, and Tailwind CSS
 - **State Management**: React Context API
 - **API**: [FakeStoreAPI](https://fakestoreapi.com/) - For product data
 - **Icons**: [React Icons](https://react-icons.github.io/react-icons/)
+- **Assets**: Custom favicon and logo in PNG format
 
 ## Getting Started
 
@@ -53,6 +55,9 @@ src/
 │   ├── context/         # React context providers
 │   ├── services/        # API services
 │   └── types/           # TypeScript type definitions
+public/
+├── favicon.png         # Custom favicon
+└── logo.png           # Application logo
 ```
 
 ## Contributing

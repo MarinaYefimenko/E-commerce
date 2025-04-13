@@ -4,6 +4,8 @@ import "./globals.css";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import { ProductProvider } from "./context/ProductContext";
 import { SearchProvider } from "./context/SearchContext";
+import { CartProvider } from "./context/CartContext";
+import { OrdersProvider } from "./context/OrdersContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -11,8 +13,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MYFashion - Online Store",
-  description: "Your favorite fashion store",
+  title: "MY Store",
+  description: "Your favorite store",
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.png', type: 'image/png' }
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +34,11 @@ export default function RootLayout({
         <ProductProvider>
           <SearchProvider>
             <FavoritesProvider>
-              {children}
+              <CartProvider>
+                <OrdersProvider>
+                  {children}
+                </OrdersProvider>
+              </CartProvider>
             </FavoritesProvider>
           </SearchProvider>
         </ProductProvider>

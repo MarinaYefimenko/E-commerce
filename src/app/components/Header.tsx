@@ -2,22 +2,26 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { FaShoppingCart, FaHeart, FaSearch, FaTimes } from 'react-icons/fa';
+import { FaShoppingCart, FaHeart, FaSearch, FaTimes, FaUser } from 'react-icons/fa';
 import { useFavorites } from '../context/FavoritesContext';
 import { useProducts } from '../context/ProductContext';
 import { useSearch } from '../context/SearchContext';
+import { useCart } from '../context/CartContext';
 import FavoritesModal from './FavoritesModal';
+import CartDrawer from './CartDrawer';
 
 const Header: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showClearButton, setShowClearButton] = useState(false);
   const { favorites } = useFavorites();
+  const { cartItems } = useCart();
   const { searchProducts, clearSearch: clearProductsSearch } = useProducts();
   const { searchQuery, setSearchQuery, clearSearch } = useSearch();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const isHomePage = pathname === '/';
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     const query = searchParams.get('q');
@@ -66,10 +70,10 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <header className="flex justify-between items-center px-8 py-4 bg-white shadow-sm fixed top-0 right-0 left-1/4 z-40">
+      <header className="flex justify-between items-center px-4 md:px-8 py-4 bg-white shadow-sm fixed top-0 right-0 left-0 md:left-[25%] z-40">
         <form 
           onSubmit={handleSearchSubmit}
-          className="relative flex-1 max-w-md"
+          className="relative flex-1 max-w-md mr-4 ml-16 md:ml-0"
         >
           <input
             type="text"
@@ -101,18 +105,30 @@ const Header: React.FC = () => {
           >
             <FaHeart className={`text-xl ${favorites.length > 0 ? 'text-red-500' : 'text-gray-800'}`} />
           </button>
-          <div className="relative cursor-pointer">
-            <FaShoppingCart className="text-xl text-gray-800" />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 text-sm">
-              0
-            </span>
-          </div>
+          <button 
+            onClick={() => setIsCartOpen(true)}
+            className="relative p-2 hover:bg-gray-100 rounded-full"
+          >
+            <FaShoppingCart className="text-xl" />
+            {cartItems.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {cartItems.length}
+              </span>
+            )}
+          </button>
+          <button 
+            onClick={() => router.push('/orders')}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <FaUser className="text-xl" />
+          </button>
         </div>
       </header>
       <FavoritesModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
       />
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
 };

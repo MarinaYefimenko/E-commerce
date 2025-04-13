@@ -3,9 +3,10 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { FaHeart, FaStar, FaImage, FaSpinner } from 'react-icons/fa';
+import { FaHeart, FaStar, FaImage, FaSpinner, FaShoppingCart } from 'react-icons/fa';
 import { IProduct } from '../types/product.interface';
 import { useFavorites } from '../context/FavoritesContext';
+import { useCart } from '../context/CartContext';
 
 interface ProductCardProps extends IProduct {}
 
@@ -14,6 +15,7 @@ const ProductCard: React.FC<ProductCardProps> = (product) => {
   const [imageError, setImageError] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { addToCart, isInCart } = useCart();
   const router = useRouter();
 
   const handleDetailsClick = async (e: React.MouseEvent) => {
@@ -27,6 +29,12 @@ const ProductCard: React.FC<ProductCardProps> = (product) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product);
   };
 
   return (
@@ -69,8 +77,16 @@ const ProductCard: React.FC<ProductCardProps> = (product) => {
         <div className="space-y-3">
           <p className="text-xl font-bold text-red-600">${price.toFixed(2)}</p>
           <div className="space-y-2">
-            <button className="w-full px-4 py-2 bg-black text-white text-sm rounded-lg hover:bg-gray-800 transition-colors">
-              Buy Now
+            <button 
+              onClick={handleAddToCart}
+              className={`w-full px-4 py-2 text-sm rounded-lg transition-colors flex items-center justify-center gap-2 ${
+                isInCart(id) 
+                  ? 'bg-green-500 text-white hover:bg-green-600' 
+                  : 'bg-black text-white hover:bg-gray-800'
+              }`}
+            >
+              <FaShoppingCart />
+              {isInCart(id) ? 'In Cart' : 'Add to Cart'}
             </button>
             <button 
               onClick={handleDetailsClick}
