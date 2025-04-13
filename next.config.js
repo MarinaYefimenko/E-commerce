@@ -13,7 +13,10 @@ const nextConfig = {
         pathname: '/img/**',
       },
     ],
+    unoptimized: true,
   },
+  output: 'export',
+  basePath: '/e-commerce',
 }
 
 module.exports = nextConfig 
