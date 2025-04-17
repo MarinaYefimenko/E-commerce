@@ -6,6 +6,7 @@ import { ProductProvider } from "./context/ProductContext";
 import { SearchProvider } from "./context/SearchContext";
 import { CartProvider } from "./context/CartContext";
 import { OrdersProvider } from "./context/OrdersContext";
+import { STATIC_PATHS } from "./config/paths";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,8 +18,8 @@ export const metadata: Metadata = {
   description: "Your favorite store",
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/favicon.png', type: 'image/png' }
+      { url: STATIC_PATHS.favicon, sizes: 'any' },
+      { url: STATIC_PATHS.faviconPng, type: 'image/png' }
     ],
   },
 };

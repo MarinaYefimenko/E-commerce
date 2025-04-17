@@ -11,7 +11,9 @@ const nextConfig = {
       },
     ],
   },
-  basePath: '/e-commerce',
+  //for deployment
+  basePath: '/E-commerce',
+  assetPrefix: '/E-commerce/',
 }
 
 module.exports = nextConfig 

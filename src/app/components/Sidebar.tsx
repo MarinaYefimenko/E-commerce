@@ -8,13 +8,15 @@ import { useProducts } from '../context/ProductContext';
 import { useSearch } from '../context/SearchContext';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { Suspense } from 'react';
+import { STATIC_PATHS, APP_PATHS } from '../config/paths';
 
 interface SidebarProps {
   onCategoryChange: (category: string) => void;
   activeCategory: string;
+  className?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onCategoryChange, activeCategory }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onCategoryChange, activeCategory, className }) => {
   const [categories, setCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -47,6 +49,18 @@ const Sidebar: React.FC<SidebarProps> = ({ onCategoryChange, activeCategory }) =
     clearSearch();
   };
 
+  const handleCategoryClick = (category: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (category === 'all') {
+      params.delete('category');
+    } else {
+      params.set('category', category);
+    }
+    router.push(`${APP_PATHS.home}?${params.toString()}`);
+    onCategoryChange(category);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <>
       <button
@@ -60,17 +74,20 @@ const Sidebar: React.FC<SidebarProps> = ({ onCategoryChange, activeCategory }) =
         fixed left-0 top-0 h-screen bg-gray-50 p-5 border-r border-gray-200
         transform transition-transform duration-300 ease-in-out overflow-y-auto
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
-        md:translate-x-0 md:sticky md:top-0
+        md:translate-x-0  md:sticky md:top-0
         w-64 md:w-1/4
         z-40
+        overflow-y-auto
+        p-4
+        ${className || ''}
       `}>
         <div 
           className="relative h-12 w-48 mb-8 cursor-pointer"
           onClick={handleLogoClick}
         >
           <Image
-            src="/logo.png"
-            alt="MYFashion Logo"
+            src={STATIC_PATHS.logo}
+            alt="Logo"
             fill
             className="object-contain !w-auto"
             priority
@@ -85,10 +102,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onCategoryChange, activeCategory }) =
           </div>}>
             <ul className="space-y-1">
               <li 
-                onClick={() => {
-                  onCategoryChange('all');
-                  setIsMobileMenuOpen(false);
-                }}
+                onClick={() => handleCategoryClick('all')}
                 className={`px-4 py-2 rounded cursor-pointer transition-colors capitalize ${
                   activeCategory === 'all' 
                     ? 'bg-black text-white' 
@@ -98,12 +112,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onCategoryChange, activeCategory }) =
                 All products
               </li>
               {categories.map((category) => (
-                <li 
-                  key={category} 
-                  onClick={() => {
-                    onCategoryChange(category);
-                    setIsMobileMenuOpen(false);
-                  }}
+                <li
+                  key={category}
+                  onClick={() => handleCategoryClick(category)}
                   className={`px-4 py-2 rounded cursor-pointer transition-colors capitalize ${
                     activeCategory === category 
                       ? 'bg-black text-white' 

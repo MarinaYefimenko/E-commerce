@@ -2,6 +2,7 @@
   "name": "e-commerce",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://marinayefimenko.github.io/E-commerce",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

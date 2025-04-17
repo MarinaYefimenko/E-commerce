@@ -10,6 +10,7 @@ import { useCart } from '../context/CartContext';
 import FavoritesModal from './FavoritesModal';
 import CartDrawer from './CartDrawer';
 import { Suspense } from 'react';
+import { APP_PATHS } from '../config/paths';
 
 const Header: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,22 +41,19 @@ const Header: React.FC = () => {
     
     if (isHomePage) {
       searchProducts(query);
-      const params = new URLSearchParams(searchParams.toString());
-      params.set('category', 'all');
-      if (query) {
-        params.set('q', query);
-      } else {
-        params.delete('q');
-      }
-      router.push(`/?${params.toString()}`);
     }
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isHomePage && searchQuery.trim()) {
-      router.push(`/?category=all&q=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(`${APP_PATHS.home}?category=all&q=${encodeURIComponent(searchQuery.trim())}`);
       searchProducts(searchQuery);
+    } else if (isHomePage && searchQuery.trim()) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('category', 'all');
+      params.set('q', searchQuery.trim());
+      router.push(`${APP_PATHS.home}?${params.toString()}`);
     }
   };
 
@@ -66,7 +64,7 @@ const Header: React.FC = () => {
     clearSearch();
     const params = new URLSearchParams(searchParams.toString());
     params.delete('q');
-    router.push(`/?${params.toString()}`);
+    router.push(`${APP_PATHS.home}?${params.toString()}`);
   };
 
   return (
@@ -122,7 +120,7 @@ const Header: React.FC = () => {
             )}
           </button>
           <button 
-            onClick={() => router.push('/orders')}
+            onClick={() => router.push(APP_PATHS.orders.replace('/E-commerce/E-commerce', '/E-commerce'))}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
             <FaUser className="text-xl" />

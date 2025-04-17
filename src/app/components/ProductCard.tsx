@@ -7,6 +7,7 @@ import { FaHeart, FaStar, FaImage, FaSpinner, FaShoppingCart } from 'react-icons
 import { IProduct } from '../types/product.interface';
 import { useFavorites } from '../context/FavoritesContext';
 import { useCart } from '../context/CartContext';
+import { APP_PATHS } from '../config/paths';
 
 interface ProductCardProps extends IProduct {}
 
@@ -23,7 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = (product) => {
       e.preventDefault();
       e.stopPropagation();
       setIsLoading(true);
-      await router.push(`/product/${id}`);
+      await router.push(APP_PATHS.product(id).replace('/E-commerce/E-commerce', '/E-commerce'));
     } catch (error) {
       console.error('Navigation error:', error);
     } finally {

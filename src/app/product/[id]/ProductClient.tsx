@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FaStar, FaImage, FaArrowLeft, FaHeart, FaShoppingCart } from 'react-icons/fa';
 import { ProductService } from '../../services/product.service';
 import { IProduct } from '../../types/product.interface';
@@ -10,6 +10,26 @@ import { useFavorites } from '../../context/FavoritesContext';
 import { useCart } from '../../context/CartContext';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
+
+function SearchParamsWrapper({ onCategoryChange }: { onCategoryChange: (category: string) => void }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const handleCategoryClick = (category: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (category === 'all') {
+      params.delete('category');
+    } else {
+      params.set('category', category);
+    }
+    router.push(`/?${params.toString()}`);
+    onCategoryChange(category);
+  };
+
+  return (
+    <Sidebar className="md:fixed" activeCategory={searchParams.get('category') || 'all'} onCategoryChange={handleCategoryClick} />
+  );
+}
 
 interface ProductClientProps {
   params: {
@@ -44,11 +64,6 @@ export default function ProductClient({ params }: ProductClientProps) {
     fetchProduct();
   }, [params.id]);
 
-  const handleCategoryChange = (category: string) => {
-    setActiveCategory(category);
-    router.push('/');
-  };
-
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     if (product) {
@@ -58,9 +73,11 @@ export default function ProductClient({ params }: ProductClientProps) {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen">
-        <Sidebar activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
-        <div className="flex-1 md:ml-[25%]">
+      <div className="flex min-h-screen bg-gray-50">
+        <Suspense fallback={<div className="w-64 fixed top-0 left-0 bottom-0 bg-white shadow-sm" />}>
+          <SearchParamsWrapper onCategoryChange={setActiveCategory} />
+        </Suspense>
+        <div className="flex-1 ml-0 md:ml-64">
           <Header />
           <div className="p-4 md:p-8 mt-16 w-full">
             <div className="animate-pulse">
@@ -83,9 +100,11 @@ export default function ProductClient({ params }: ProductClientProps) {
 
   if (!product) {
     return (
-      <div className="flex min-h-screen">
-        <Sidebar activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
-        <div className="flex-1 md:ml-[25%]">
+      <div className="flex min-h-screen bg-gray-50">
+        <Suspense fallback={<div className="w-64 fixed top-0 left-0 bottom-0 bg-white shadow-sm" />}>
+          <SearchParamsWrapper onCategoryChange={setActiveCategory} />
+        </Suspense>
+        <div className="flex-1 ml-0 md:ml-64">
           <Header />
           <div className="p-4 md:p-8 mt-16 w-full">
             Product not found
@@ -96,9 +115,11 @@ export default function ProductClient({ params }: ProductClientProps) {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar activeCategory={activeCategory} onCategoryChange={handleCategoryChange} />
-      <main className="flex-1">
+    <div className="flex min-h-screen bg-gray-50">
+      <Suspense fallback={<div className="w-64 fixed top-0 left-0 bottom-0 bg-white shadow-sm" />}>
+        <SearchParamsWrapper onCategoryChange={setActiveCategory} />
+      </Suspense>
+      <div className="flex-1 ml-0">
         <Header />
         <div className="p-4 md:p-8 mt-16">
           <button 
@@ -190,7 +211,7 @@ export default function ProductClient({ params }: ProductClientProps) {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 } 
